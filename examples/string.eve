@@ -1,0 +1,7 @@
+foo
+```
+  match
+     split[text: "/a/b/c/d/", by: "/", index: index, token: token]
+  bind
+     [#div text: join[token, index, with: "%"]]
+```
