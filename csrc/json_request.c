@@ -276,6 +276,7 @@ void new_json_session(bag root, boolean tracing,
     table_set(j->scopes, intern_cstring("session"), j->session->u);
     table_set(j->scopes, intern_cstring("all"), j->root->u);
     table_set(j->scopes, intern_cstring("event"), j->event_uuid);
+    table_set(j->scopes, intern_cstring("files"), filebag_init(sstring("."), generate_uuid));
     j->eh = allocate_rolling(pages, sstring("eval"));
     j->s = build_evaluation(j->scopes, j->persisted, cont(j->h, send_response, j));
     j->write = websocket_send_upgrade(j->eh, b, u,

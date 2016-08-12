@@ -13,6 +13,7 @@
 
 void ticks_to_timeval(struct timeval *a, ticks b);
 ticks timeval_to_ticks(struct timeval *a);
+ticks timeval_to_ticks(struct timeval *a);
 typedef int decsriptor;
 
 #define MIN(x, y) ((x)<(y)?(x):(y))
