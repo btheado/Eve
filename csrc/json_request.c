@@ -270,13 +270,18 @@ void new_json_session(bag root, boolean tracing,
     j->event_uuid = generate_uuid();
     j->graph = root_graph;
     j->persisted = create_value_table(h);
+    bag fb = filebag_init(sstring("."), generate_uuid());
     table_set(j->persisted, j->root->u, j->root);
     table_set(j->persisted, j->session->u, j->session);
+    // this has to be in persisted, otherwise we will only read
+    // from the f version - something is very strangely structured here
+    table_set(j->persisted, fb->u, fb);
+
     j->scopes = create_value_table(j->h);
     table_set(j->scopes, intern_cstring("session"), j->session->u);
     table_set(j->scopes, intern_cstring("all"), j->root->u);
     table_set(j->scopes, intern_cstring("event"), j->event_uuid);
-    table_set(j->scopes, intern_cstring("files"), filebag_init(sstring("."), generate_uuid));
+    table_set(j->scopes, intern_cstring("files"), fb->u);
     j->eh = allocate_rolling(pages, sstring("eval"));
     j->s = build_evaluation(j->scopes, j->persisted, cont(j->h, send_response, j));
     j->write = websocket_send_upgrade(j->eh, b, u,
